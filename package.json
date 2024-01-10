@@ -1,0 +1,42 @@
+{
+  "name": "satalite-imaging-nextjs",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev -p 22137",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.391.0",
+    "@aws-sdk/signature-v4-crt": "^3.391.0",
+    "@headlessui/react": "^1.7.17",
+    "@heroicons/react": "^2.0.18",
+    "@prisma/client": "^5.1.1",
+    "@radix-ui/react-select": "^1.2.2",
+    "autoprefixer": "10.4.14",
+    "aws-crt": "^1.18.0",
+    "class-variance-authority": "^0.6.0",
+    "clsx": "^1.2.1",
+    "lucide-react": "^0.248.0",
+    "moment": "^2.29.4",
+    "next": "13.4.7",
+    "next-auth": "^4.22.1",
+    "postcss": "8.4.24",
+    "primereact": "^9.5.0",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "react-popper": "^2.3.0",
+    "serverless-mysql": "^1.5.5",
+    "tailwind-merge": "^1.13.2",
+    "tailwindcss": "3.3.2",
+    "tailwindcss-animate": "^1.0.6"
+  },
+  "devDependencies": {
+    "@tailwindcss/forms": "^0.5.3",
+    "@types/node": "20.3.1",
+    "prisma": "^5.0.0",
+    "typescript": "5.1.3"
+  }
+}

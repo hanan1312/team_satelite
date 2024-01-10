@@ -1,0 +1,30 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model ml_localization {
+  ID                      Int       @id @default(autoincrement())
+  image_name              String?   @db.VarChar(100)
+  error_type              String?   @db.VarChar(100)
+  pic_size_h_pix          Int?
+  pic_size_w_pix          Int?
+  sub_img_count_h         Int?
+  sub_img_count_w         Int?
+  sub_img_loc_h           Int?
+  sub_img_loc_w           Int?
+  num_errors_raw          Int?
+  sub_img_error_start_pix String?   @db.Text
+  sub_img_error_end_pix   String?   @db.Text
+  error_start_time        DateTime? @db.DateTime(0)
+  error_end_time          DateTime? @db.DateTime(0)
+  s3_path                 String?   @db.VarChar(100)
+  original_img            String?   @db.VarChar(100)
+  sat_name                String?   @db.VarChar(100)
+  local_folder_name       String?   @db.VarChar(2000)
+  Pass_Date               DateTime? @db.DateTime(0)
+}

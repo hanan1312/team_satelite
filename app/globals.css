@@ -1,0 +1,157 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 47.4% 11.2%;
+
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 47.4% 11.2%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 47.4% 11.2%;
+
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+
+    --primary: 222.2 47.4% 11.2%;
+    --primary-foreground: 210 40% 98%;
+
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+
+    --destructive: 0 100% 50%;
+    --destructive-foreground: 210 40% 98%;
+
+    --ring: 215 20.2% 65.1%;
+
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 224 71% 4%;
+    --foreground: 213 31% 91%;
+
+    --muted: 223 47% 11%;
+    --muted-foreground: 215.4 16.3% 56.9%;
+
+    --popover: 224 71% 4%;
+    --popover-foreground: 215 20.2% 65.1%;
+
+    --card: 224 71% 4%;
+    --card-foreground: 213 31% 91%;
+
+    --border: 216 34% 17%;
+    --input: 216 34% 17%;
+
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 1.2%;
+
+    --secondary: 222.2 47.4% 11.2%;
+    --secondary-foreground: 210 40% 98%;
+
+    --accent: 216 34% 17%;
+    --accent-foreground: 210 40% 98%;
+
+    --destructive: 0 63% 31%;
+    --destructive-foreground: 210 40% 98%;
+
+    --ring: 216 34% 17%;
+
+    --radius: 0.5rem;
+  }
+}
+
+/* @layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+} */
+
+body {
+  @apply bg-gray-100;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  color: rgba(0, 0, 0, 0);
+  opacity: 1;
+  display: block;
+  background: url("./calendar.svg") no-repeat center center;
+  width: 24px;
+  height: 24px;
+  border-width: thin;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* MagnifyImage.css */
+
+.magnify-image {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.image-container {
+  position: relative;
+  overflow: hidden;
+  width: 100%; /* Adjust the width and height as needed */
+  max-width: 42rem;
+  height: auto; /* This defines the size of the magnified area */
+}
+
+.image-container img {
+  max-width: 100%;
+  height: auto;
+  cursor: none;
+}
+
+.magnifier {
+  position: absolute;
+  width: 75px; /* Adjust the size of the magnified square */
+  height: 75px;
+  border: 0.5px solid #00000055; /* Square border style */
+  border-radius: 2px;
+  background-color: rgba(
+    255,
+    255,
+    255,
+    0.2
+  ); /* Background color of the square */
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  transform-origin: bottom right;
+}
+
+.magnified-image-container {
+  margin-left: 20px; /* Adjust the spacing between the original image and magnified image as needed */
+  /* position: relative; */
+  overflow: hidden;
+  width: 300px;
+  height: 300px;
+  border: 1px solid #00000055;
+}
+
+.magnified-image {
+  max-width: none;
+  height: auto;
+  position: absolute;
+  /* top: 0; */
+  left: 0;
+  margin-top: auto;
+  margin-bottom: auto;
+  transform-origin: top left;
+}
