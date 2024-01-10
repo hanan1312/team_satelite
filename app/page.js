@@ -38,6 +38,13 @@ export default function Home() {
       additional: null,
       satellites: [],
     },
+    {
+      id: "table_mountain",
+      title: "Table Mountain",
+      description: null,
+      additional: null,
+      satellites: [],
+    },
   ]);
   const [selectedLocation, setSelectedLocation] = useState(locations[0]);
 
@@ -55,7 +62,7 @@ export default function Home() {
     const baseUrl = "/api/locations";
     const locationNames = [];
     locations.forEach((location) => {
-      locationNames.push(location.title);
+      locationNames.push(location.id);
     });
     const params = {
       locations: locationNames,
@@ -74,9 +81,19 @@ export default function Home() {
       let newLoc = [...locations];
 
       for (const [key, value] of Object.entries(locationData.response)) {
-        const locIndex = newLoc.findIndex((loc) => loc.title == key);
+        const locIndex = newLoc.findIndex((loc) => loc.id == key);
         if (locIndex !== -1) {
-          newLoc[locIndex] = { ...newLoc[locIndex], ...value };
+          newLoc[locIndex].description = value.description;
+          newLoc[locIndex].additional = value.additional;
+          newLoc[locIndex].satellites = value.satellites;
+
+          // newLoc[locIndex] = {
+          //   description: value.description,
+          //   additional: value.additional,
+          //   satellites: value.satellites,
+          //   ...newLoc[locIndex],
+          // };
+          console.log({ value, newLoc });
         }
       }
 
