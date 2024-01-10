@@ -17,7 +17,7 @@ export async function GET(req, res) {
   let imageNames = [getQSParamFromURL("image_name", req.url)];
 
   const trans = await prisma.$transaction([
-    prisma.ml_localization.count({
+    prisma.ml_localization_rf_events.count({
       where: {
         image_name: {
           in: imageNames,
@@ -25,7 +25,7 @@ export async function GET(req, res) {
       },
     }),
 
-    prisma.ml_localization.findMany({
+    prisma.ml_localization_rf_events.findMany({
       skip: skip,
       take: pageSize,
       where: {
@@ -69,8 +69,14 @@ export async function POST(req, res) {
 
   const squares = body.selectedSquares;
 
+  const event_type = body.event_type;
+
+  const has_error = body.has_error;
+
+  console.log(body);
+
   const trans = await prisma.$transaction([
-    prisma.ml_localization.count({
+    prisma.ml_localization_rf_events.count({
       where: {
         image_name: {
           in: imageNames,
@@ -87,6 +93,12 @@ export async function POST(req, res) {
             },
           },
           {
+            Error_Source: event_type !== "all" ? event_type : undefined,
+          },
+          {
+            has_error: has_error !== "all" ? has_error === "true" : undefined,
+          },
+          {
             OR: squares.map((square) => ({
               AND: [{ sub_img_loc_w: square.x }, { sub_img_loc_h: square.y }],
             })),
@@ -95,7 +107,7 @@ export async function POST(req, res) {
       },
     }),
 
-    prisma.ml_localization.findMany({
+    prisma.ml_localization_rf_events.findMany({
       skip: skip,
       take: pageSize,
       where: {
@@ -112,6 +124,12 @@ export async function POST(req, res) {
             error_end_time: {
               lte: endTime,
             },
+          },
+          {
+            Error_Source: event_type !== "all" ? event_type : undefined,
+          },
+          {
+            has_error: has_error !== "all" ? has_error === "true" : undefined,
           },
           {
             OR: squares.map((square) => ({

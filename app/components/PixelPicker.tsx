@@ -93,7 +93,7 @@ function PixelPicker({
                     <div
                       className=" rounded bg-gray-100 border border-gray-300 p-0.5"
                       key={index}
-                    >{`(${square.x},${square.y})`}</div>
+                    >{`(${square.y},${square.x})`}</div>
                   ))}
                   {selectedSquares.length > itemsToShow && !isViewMore && (
                     <div>...</div>
@@ -119,14 +119,18 @@ function PixelPicker({
                     <div
                       key={x}
                       onClick={(event) => handleSquareClick(x, y, event)}
-                      className={`w-6 h-6 rounded-sm border border-gray-400 cursor-pointer ${
+                      className={`w-6 h-6 group rounded-sm border flex items-center justify-center border-gray-400 cursor-pointer text-[7px] ${
                         selectedSquares.some(
                           (square) => square.x === x && square.y === y
                         )
                           ? "bg-red-500"
                           : "bg-white"
                       }`}
-                    />
+                    >
+                      <span className="transition-opacity opacity-0 group-hover:opacity-100">
+                        {`(${y},${x})`}
+                      </span>
+                    </div>
                   ))}
                 </div>
               ))}

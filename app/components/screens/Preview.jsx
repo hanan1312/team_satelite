@@ -15,6 +15,9 @@ export default function Preview({ nextStep, prevStep, pass, selectError }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [selectedSquares, setSelectedSquares] = useState([]);
+  const [hasError, setHasError] = useState("all");
+  const [eventType, setEventType] = useState("all");
+
   const excludeKeys = [
     "image_name",
     "s3_path",
@@ -88,8 +91,6 @@ export default function Preview({ nextStep, prevStep, pass, selectError }) {
       endDate: endDateISO,
     };
 
-    console.log(params);
-
     const url = new URL(baseUrl, document.baseURI);
 
     url.search = new URLSearchParams(params).toString();
@@ -99,7 +100,11 @@ export default function Preview({ nextStep, prevStep, pass, selectError }) {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ selectedSquares: selectedSquares }),
+      body: JSON.stringify({
+        selectedSquares: selectedSquares,
+        has_error: hasError,
+        event_type: eventType,
+      }),
     });
 
     if (response.ok) {
@@ -216,13 +221,7 @@ export default function Preview({ nextStep, prevStep, pass, selectError }) {
 
   useEffect(() => {
     fetchPasses();
-    console.log({
-      page,
-      startDate,
-      endDate,
-      selectedSquares,
-    });
-  }, [page, startDate, endDate, selectedSquares]);
+  }, [page, startDate, endDate, selectedSquares, hasError, eventType]);
 
   const tableRows = useMemo(() => {
     if (!data?.data?.data || data.data.data.length == 0) {
@@ -239,7 +238,74 @@ export default function Preview({ nextStep, prevStep, pass, selectError }) {
         </div>
       );
     }
-
+    const TableCell = ({ className, value }) => (
+      <td className={className}>{value}</td>
+    );
+    const getCellValue = (key, pass) => {
+      if (key === "has_error") {
+        return pass[key] ? "Yes" : "No";
+      }
+      return pass[key] === "Invalid date" ? "N/A" : pass[key] ?? "N/A";
+    };
+    const passKeys = [
+      "ID",
+      "station",
+      "Error_Source",
+      "RF_event_type",
+      "time_stamp",
+      "s3_path",
+      "image_name",
+      "Pass date",
+      "Processed date",
+      "error_type",
+      "error_start_time",
+      "error_end_time",
+      "sub_img_loc_h",
+      "sub_img_loc_w",
+      "num_errors_raw",
+      "sub_img_error_start_pix",
+      "sub_img_error_end_pix",
+      "pic_size_h_pix",
+      "pic_size_w_pix",
+      "sub_img_count_h",
+      "sub_img_count_w",
+      "Pass_ID",
+      "original_img",
+      "sat_name",
+      "local_folder_name",
+      "Pass_Date",
+      "has_error",
+      "PCI",
+      "id",
+      "beam",
+      "carrierID",
+      "cellID",
+      "eNodeB",
+      "elevationAngle",
+      "elevationAngleUnits",
+      "eventID",
+      "headingAzimuth",
+      "headingAzimuthUnits",
+      "inverseAxialRatio",
+      "labels",
+      "locationLat",
+      "locationLatUnits",
+      "locationLon",
+      "locationLonUnits",
+      "maxBandwidth",
+      "maxBandwidthUnits",
+      "maxFrequency",
+      "maxFrequencyUnits",
+      "maxPower",
+      "maxPowerUnits",
+      "mode",
+      "notifyCarrier",
+      "remoteID",
+      "severityLevel",
+      "signalType",
+      "tiltAngle",
+      "tiltAngleUnits",
+    ];
     return data.data.data.map((pass, idx) => {
       const rowClassNames = classNames(
         "transition duration-150 ease-in-out cursor-pointer hover:bg-gray-50"
@@ -257,21 +323,14 @@ export default function Preview({ nextStep, prevStep, pass, selectError }) {
             selectError(pass);
           }}
         >
-          <td className={cellClassNames}>{pass.ID}</td>
-          <td className={cellClassNames}>{pass["Pass date"]}</td>
-          <td className={cellClassNames}>{pass["Processed date"]}</td>
-          <td className={cellClassNames}>{pass.error_type}</td>
-          <td className={cellClassNames}>{pass.error_start_time}</td>
-          <td className={cellClassNames}>{pass.error_end_time}</td>
-          <td className={cellClassNames}>{pass.sub_img_loc_h}</td>
-          <td className={cellClassNames}>{pass.sub_img_loc_w}</td>
-          <td className={cellClassNames}>{pass.num_errors_raw}</td>
-          <td className={cellClassNames}>{pass.sub_img_error_start_pix}</td>
-          <td className={cellClassNames}>{pass.sub_img_error_end_pix}</td>
-          <td className={cellClassNames}>{pass.pic_size_h_pix}</td>
-          <td className={cellClassNames}>{pass.pic_size_w_pix}</td>
-          <td className={cellClassNames}>{pass.sub_img_count_h}</td>
-          <td className={cellClassNames}>{pass.sub_img_count_w}</td>
+          {passKeys.map((key) =>
+            excludeKeys.includes(key) ? null : (
+              <TableCell
+                className={cellClassNames}
+                value={getCellValue(key, pass)}
+              />
+            )
+          )}
         </tr>
       );
     });
@@ -281,7 +340,68 @@ export default function Preview({ nextStep, prevStep, pass, selectError }) {
       return null;
     }
 
-    return Object.keys(data.data.data[0]).map((key, idx) => {
+    const passKeys = [
+      "ID",
+      "station",
+      "Error_Source",
+      "RF_event_type",
+      "time_stamp",
+      "s3_path",
+      "image_name",
+      "Pass date",
+      "Processed date",
+      "error_type",
+      "error_start_time",
+      "error_end_time",
+      "sub_img_loc_h",
+      "sub_img_loc_w",
+      "num_errors_raw",
+      "sub_img_error_start_pix",
+      "sub_img_error_end_pix",
+      "pic_size_h_pix",
+      "pic_size_w_pix",
+      "sub_img_count_h",
+      "sub_img_count_w",
+      "Pass_ID",
+      "original_img",
+      "sat_name",
+      "local_folder_name",
+      "Pass_Date",
+      "has_error",
+      "PCI",
+      "id",
+      "beam",
+      "carrierID",
+      "cellID",
+      "eNodeB",
+      "elevationAngle",
+      "elevationAngleUnits",
+      "eventID",
+      "headingAzimuth",
+      "headingAzimuthUnits",
+      "inverseAxialRatio",
+      "labels",
+      "locationLat",
+      "locationLatUnits",
+      "locationLon",
+      "locationLonUnits",
+      "maxBandwidth",
+      "maxBandwidthUnits",
+      "maxFrequency",
+      "maxFrequencyUnits",
+      "maxPower",
+      "maxPowerUnits",
+      "mode",
+      "notifyCarrier",
+      "remoteID",
+      "severityLevel",
+      "signalType",
+      "tiltAngle",
+      "tiltAngleUnits",
+    ];
+
+    // return Object.keys(data.data.data[0]).map((key, idx) => {
+    return passKeys.map((key, idx) => {
       if (excludeKeys.includes(key)) {
         return null;
       }
@@ -354,6 +474,52 @@ export default function Preview({ nextStep, prevStep, pass, selectError }) {
                             applyEndDate(e.target.value);
                           }}
                         />
+                      </div>
+                    </div>
+                    {/* <div className="flex flex-col gap-1">
+                      <label
+                        className="text-gray-500"
+                        htmlFor="hasError"
+                      >
+                        Has Error
+                      </label>
+                      <div className="relative">
+                        <select
+                          name="hasError"
+                          id="hasError"
+                          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                          value={hasError}
+                          onChange={(e) => {
+                            setHasError(e.target.value);
+                          }}
+                        >
+                          <option value="all">All</option>
+                          <option value={true}>Yes</option>
+                          <option value={false}>No</option>
+                        </select>
+                      </div>
+                    </div> */}
+                    <div className="flex flex-col gap-1">
+                      <label
+                        className="text-gray-500"
+                        htmlFor="eventType"
+                      >
+                        Error Source
+                      </label>
+                      <div className="relative">
+                        <select
+                          name="eventType"
+                          id="eventType"
+                          className="bg-gray-50 border pr-8 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                          value={eventType}
+                          onChange={(e) => {
+                            setEventType(e.target.value);
+                          }}
+                        >
+                          <option value="all">All</option>
+                          <option value="Img_Dgrd">Img_Dgrd</option>
+                          <option value="RF_evt">RF_evt</option>
+                        </select>
                       </div>
                     </div>
                   </div>

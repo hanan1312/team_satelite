@@ -11,12 +11,10 @@ const pageSize = 100;
 
 // Helper function to get location data
 async function getLocationData(location) {
-  return await prisma.ml_localization.groupBy({
+  return await prisma.ml_localization_rf_events.groupBy({
     by: ["sat_name"],
     where: {
-      s3_path: {
-        contains: location,
-      },
+      station: location,
     },
     _count: {
       _all: true,
@@ -25,11 +23,12 @@ async function getLocationData(location) {
 }
 
 // Helper function to get satellite data
-async function getSatData(satNames) {
+async function getSatData(satNames, location) {
   const findManyTransactions = satNames.map((sat_name) =>
-    prisma.ml_localization.findMany({
+    prisma.ml_localization_rf_events.findMany({
       where: {
         sat_name: sat_name,
+        station: location,
       },
       orderBy: {
         Pass_Date: "desc",
@@ -39,12 +38,11 @@ async function getSatData(satNames) {
   );
 
   const groupByTransactions = satNames.map((sat_name) =>
-    prisma.ml_localization.groupBy({
+    prisma.ml_localization_rf_events.groupBy({
       by: ["image_name", "s3_path", "Pass_Date"],
       where: {
-        sat_name: {
-          equals: sat_name,
-        },
+        sat_name: sat_name,
+        station: location,
       },
       orderBy: {
         Pass_Date: "desc",
@@ -54,6 +52,8 @@ async function getSatData(satNames) {
 
   const findManyResults = await Promise.all(findManyTransactions);
   const groupByResults = await Promise.all(groupByTransactions);
+
+  console.log({ ...findManyResults, ...groupByResults });
   return { findManyResults, groupByResults };
 }
 
@@ -84,9 +84,15 @@ export async function GET(req, res) {
 
   let locationPromises = locations.map(async (location) => {
     let locationData = await getLocationData(location);
+    console.log(locationData, location);
     let lastLocationDate = null;
     let satNames = locationData.map((item) => item.sat_name);
-    let { findManyResults, groupByResults } = await getSatData(satNames);
+    let { findManyResults, groupByResults } = await getSatData(
+      satNames,
+      location
+    );
+
+    console.log({ findManyResults, groupByResults });
     // let lastEntries = await Promise.all(satDataPromises);
 
     let satellites = findManyResults.map((e, i) => {

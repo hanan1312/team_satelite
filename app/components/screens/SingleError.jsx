@@ -137,7 +137,7 @@ export default function Preview({ nextStep, prevStep, pass, error }) {
                         <span className="truncate">{key}</span>
                       </div>
                       <p className="flex items-center mt-2 text-sm text-gray-500">
-                        <span className="truncate">{value}</span>
+                        <span className="truncate">{value ?? "N/A"}</span>
                       </p>
                     </div>
                   </div>
