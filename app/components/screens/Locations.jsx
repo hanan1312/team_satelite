@@ -14,11 +14,12 @@ export default function Locations({
   prevStep,
   onSelectedLocation,
 }) {
-  const [selectedLocation, setSelectedLocation] = useState(locations[0]);
+  const [selectedLocation, setSelectedLocation] = useState(locations);
 
+  console.log(locations,'locations')
   const handleSelectedLocation = (location) => {
     if (!location) return;
-    console.log(location);
+    // console.log(location);
     setSelectedLocation(location);
     onSelectedLocation(location);
   };
