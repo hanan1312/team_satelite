@@ -30,7 +30,8 @@ export default function Home() {
     selectedLocation
     
   );
-  // console.log(selectedLocation.satellites,'selectedLocation')
+  console.log(selectedLocation, 'selectedLocation')
+  console.log(locations[0],'locations')
   const [selectedPass, setSelectedPass] = useState(null);
 
   const [selectedError, setSelectedError] = useState(null);
