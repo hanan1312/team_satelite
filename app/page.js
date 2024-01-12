@@ -30,8 +30,7 @@ export default function Home() {
     selectedLocation
     
   );
-  console.log(selectedLocation, 'selectedLocation')
-  console.log(locations[0],'locations')
+
   const [selectedPass, setSelectedPass] = useState(null);
 
   const [selectedError, setSelectedError] = useState(null);
@@ -41,16 +40,12 @@ export default function Home() {
     setInitialLoading(true);
     const baseUrl = "/api/locations";
     
-    const locationNames = ['AOML', 'Hawaii', 'table_mountain'];
+
     
-    const params = {
-      locations: locationNames,
-    };
- 
+
     
     const url = new URL(baseUrl, document.baseURI);
-
-    url.search = new URLSearchParams(params).toString();
+    // url.search = new URLSearchParams(params).toString();
 
     const response = await fetch(url);
     if (response.ok) {

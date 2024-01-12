@@ -53,7 +53,7 @@ async function getSatData(satNames, location) {
   const findManyResults = await Promise.all(findManyTransactions);
   const groupByResults = await Promise.all(groupByTransactions);
 
-  console.log({ ...findManyResults, ...groupByResults });
+
   return { findManyResults, groupByResults };
 }
 
@@ -78,13 +78,19 @@ function createSatellite(e, locationData, groupByResult) {
   };
 }
 
-export async function GET(req, res) {
-  let locations = getQSParamFromURL("locations", req.url).split(",");
-  let response = {};
+async function getLocations() {
+  return await prisma.$queryRaw`SELECT distinct station FROM sys.ml_localization_rf_events`
+}
 
-  let locationPromises = locations.map(async (location) => {
+export async function GET(req, res) {
+  // let locations = getQSParamFromURL("locations", req.url).split(",");
+  let response = {};
+  let locations = await getLocations();
+  let locationNames=locations.map(e=>e.station)
+
+  let locationPromises = locationNames.map(async (location) => {
     let locationData = await getLocationData(location);
-    console.log(locationData, location);
+    
     let lastLocationDate = null;
     let satNames = locationData.map((item) => item.sat_name);
     let { findManyResults, groupByResults } = await getSatData(
@@ -92,7 +98,7 @@ export async function GET(req, res) {
       location
     );
 
-    console.log({ findManyResults, groupByResults });
+    // console.log({ findManyResults, groupByResults });
     // let lastEntries = await Promise.all(satDataPromises);
 
     let satellites = findManyResults.map((e, i) => {
