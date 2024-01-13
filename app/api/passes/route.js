@@ -12,9 +12,9 @@ export async function GET(req, res) {
   let skip = getQSParamFromURL("page", req.url)
     ? (getQSParamFromURL("page", req.url) - 1) * pageSize
     : 0;
-
+  
   let sat_name = getQSParamFromURL("sat_name", req.url);
-
+  
   let has_error = getQSParamFromURL("has_error", req.url);
 
   const today = new Date();
@@ -31,7 +31,7 @@ export async function GET(req, res) {
   }
   const trans = await prisma.$transaction([
     prisma.ml_localization_rf_events.groupBy({
-      by: ["image_name", "s3_path", "Pass_Date", "has_error","Pass_ID"],
+      by: ["image_name", "s3_path", "has_error","Pass_ID"],
       skip: skip,
       take: pageSize,
       where: {
@@ -69,11 +69,11 @@ export async function GET(req, res) {
         ],
       },
       orderBy: {
-        Pass_Date: "desc",
+        Pass_ID: "desc",
       },
     }),
     prisma.ml_localization_rf_events.groupBy({
-      by: ["image_name", "s3_path", "Pass_Date", "has_error","Pass_ID"],
+      by: [ "s3_path",  "has_error","Pass_ID"],
       where: {
         sat_name: {
           equals: sat_name,
@@ -109,7 +109,7 @@ export async function GET(req, res) {
         ],
       },
       orderBy: {
-        Pass_Date: "desc",
+        Pass_ID: "desc",
       },
     }),
   ]);
