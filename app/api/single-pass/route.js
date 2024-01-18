@@ -9,6 +9,7 @@ const prisma = new PrismaClient();
 
 const pageSize = 100;
 
+
 export async function GET(req, res) {
   let skip = getQSParamFromURL("page", req.url)
     ? (getQSParamFromURL("page", req.url) - 1) * pageSize
@@ -47,9 +48,17 @@ export async function GET(req, res) {
     data,
   });
 }
+
+// async function getImageName() {
+//   return await prisma.$queryRaw`select image_name from sys.ml_localization_rf_events`;
+// }
+// let findImageName = await getImageName();
+// let imageName = [findImageName[0].image_name];
+// console.log(imageName, "test imgnum");
+
 export async function POST(req, res) {
   const body = await req.json();
-  console.log(body);
+  // console.log(body);
 
   let skip = getQSParamFromURL("page", req.url)
     ? (getQSParamFromURL("page", req.url) - 1) * pageSize
@@ -73,7 +82,7 @@ export async function POST(req, res) {
 
   const has_error = body.has_error;
 
-  console.log(body);
+  // console.log(body);
 
   const trans = await prisma.$transaction([
     prisma.ml_localization_rf_events.count({
@@ -145,8 +154,6 @@ export async function POST(req, res) {
     count: trans[0],
     data: trans[1],
   };
-
-  // console.log(data.data);
 
   return NextResponse.json({
     data,
