@@ -31,7 +31,7 @@ export async function GET(req, res) {
   }
   const trans = await prisma.$transaction([
     prisma.ml_localization_rf_events.groupBy({
-      by: ["image_name", "s3_path", "has_error","Pass_ID","Pass_Date"  ],
+      by: ["image_name", "s3_path", "has_error","Pass_ID","Pass_Date"],
       skip: skip,
       take: pageSize,
       where: {

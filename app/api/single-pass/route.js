@@ -9,9 +9,9 @@ const prisma = new PrismaClient();
 
 const pageSize = 100;
 
-// async function getSatName() {
-// return await prisma.$queryRaw`select station,count(Pass_ID)from sys.ml_localization_rf_events group by station`
-// }
+async function getSatName() {
+return await prisma.$queryRaw`select station,count(Pass_ID)from sys.ml_localization_rf_events group by station`
+}
 export async function GET(req, res) {
   let skip = getQSParamFromURL("page", req.url)
     ? (getQSParamFromURL("page", req.url) - 1) * pageSize
