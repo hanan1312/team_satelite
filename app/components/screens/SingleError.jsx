@@ -13,6 +13,13 @@ export default function Preview({ nextStep, prevStep, pass, error }) {
   const [errImageUrl, setErrImageUrl] = useState(null);
 
   const excludeKeys = ["Pass date", "Processed date"];
+
+  // let test =  Object.entries(error)
+  //   .filter(([key]) => !excludeKeys.includes(key))
+  //   .map(([key, value]) => {
+  //     console.log([key, value],'test value')
+  //   })
+ 
   useEffect(() => {
     setTimeout(() => {
       setImageUrl(constructMainEC2Url(error.s3_path, error.image_name));
@@ -45,6 +52,7 @@ export default function Preview({ nextStep, prevStep, pass, error }) {
       </div>
       <div className="flex items-center justify-between w-full px-4 py-4 sm:px-6">
         <div className="flex items-center flex-1 min-w-0">
+         
           <div className="flex-shrink-0">
             <img
               className="w-12 h-12 rounded-full"

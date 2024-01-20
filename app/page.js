@@ -84,7 +84,7 @@ export default function Home() {
       stepClone[2].breadcrumb = selectedPass.s3_path;
     }
     if (selectedError) {
-      stepClone[3].breadcrumb = selectedError.image_name;
+      stepClone[3].breadcrumb = selectedError.station;
     }
     setSteps(stepClone);
   }, [selectedLocation, selectedSatelite, selectedPass, selectedError]);
@@ -158,6 +158,8 @@ export default function Home() {
             satalite={selectedSatelite}
             selectPass={onSelectedPass}
             prevStep={prevStep}
+            satellites={selectedLocation.satellites}
+            
           />
         );
       case 3:
@@ -166,6 +168,8 @@ export default function Home() {
             pass={selectedPass}
             prevStep={prevStep}
             selectError={onSelectedError}
+            onSelectedLocation={onSelectedLocation}
+            satellites={selectedLocation.satellites}
           />
         );
       case 4:
@@ -173,6 +177,7 @@ export default function Home() {
           <SingleError
             error={selectedError}
             prevStep={prevStep}
+         
           />
         );
       default:

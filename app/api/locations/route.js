@@ -75,6 +75,8 @@ function createSatellite(e, locationData, groupByResult) {
       : "No passes yet.",
     additional: `${numOfErrors} Error(s), ${numOfPasses} Pass(es)`,
     numOfPasses: numOfPasses,
+    station:e[0].station
+ 
   };
 }
 
