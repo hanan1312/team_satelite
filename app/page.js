@@ -23,33 +23,12 @@ export default function Home() {
 
   const [activeStep, setActiveStep] = useState(0);
 
-  const [locations, setLocations] = useState([
-    {
-      id: "AOML",
-      title: "AOML",
-      description: null,
-      additional: null,
-      satellites: [],
-    },
-    {
-      id: "Hawaii",
-      title: "Hawaii",
-      description: null,
-      additional: null,
-      satellites: [],
-    },
-    {
-      id: "table_mountain",
-      title: "Table Mountain",
-      description: null,
-      additional: null,
-      satellites: [],
-    },
-  ]);
+  const [locations, setLocations] = useState([]);
   const [selectedLocation, setSelectedLocation] = useState(locations[0]);
 
   const [selectedSatelite, setSelectedSatelite] = useState(
-    selectedLocation.satellites[0]
+    selectedLocation
+    
   );
 
   const [selectedPass, setSelectedPass] = useState(null);
@@ -60,16 +39,13 @@ export default function Home() {
   const fetchLocationData = async () => {
     setInitialLoading(true);
     const baseUrl = "/api/locations";
-    const locationNames = [];
-    locations.forEach((location) => {
-      locationNames.push(location.id);
-    });
-    const params = {
-      locations: locationNames,
-    };
-    const url = new URL(baseUrl, document.baseURI);
+    
 
-    url.search = new URLSearchParams(params).toString();
+    
+
+    
+    const url = new URL(baseUrl, document.baseURI);
+    // url.search = new URLSearchParams(params).toString();
 
     const response = await fetch(url);
     if (response.ok) {
@@ -77,30 +53,14 @@ export default function Home() {
 
       // await response.json then execute the following
       let locationData = await response.json();
+      const dataArray = Object.entries(locationData.response).map(e=>e[1])
+  
 
-      let newLoc = [...locations];
 
-      for (const [key, value] of Object.entries(locationData.response)) {
-        const locIndex = newLoc.findIndex((loc) => loc.id == key);
-        if (locIndex !== -1) {
-          newLoc[locIndex].description = value.description;
-          newLoc[locIndex].additional = value.additional;
-          newLoc[locIndex].satellites = value.satellites;
-
-          // newLoc[locIndex] = {
-          //   description: value.description,
-          //   additional: value.additional,
-          //   satellites: value.satellites,
-          //   ...newLoc[locIndex],
-          // };
-          console.log({ value, newLoc });
-        }
-      }
-
-      setLocations(newLoc);
+      setLocations(dataArray);
 
       // setTimeout(() => {
-      setSelectedLocation(newLoc[0]);
+      setSelectedLocation(dataArray[0]);
 
       // }, 100);
     }
@@ -115,6 +75,7 @@ export default function Home() {
     let stepClone = [...steps];
     if (selectedLocation) {
       stepClone[0].breadcrumb = selectedLocation.title;
+    
     }
     if (selectedSatelite) {
       stepClone[1].breadcrumb = selectedSatelite.title;
@@ -123,7 +84,7 @@ export default function Home() {
       stepClone[2].breadcrumb = selectedPass.s3_path;
     }
     if (selectedError) {
-      stepClone[3].breadcrumb = selectedError.image_name;
+      stepClone[3].breadcrumb = selectedError.station;
     }
     setSteps(stepClone);
   }, [selectedLocation, selectedSatelite, selectedPass, selectedError]);
@@ -197,6 +158,8 @@ export default function Home() {
             satalite={selectedSatelite}
             selectPass={onSelectedPass}
             prevStep={prevStep}
+            satellites={selectedLocation.satellites}
+            
           />
         );
       case 3:
@@ -205,6 +168,8 @@ export default function Home() {
             pass={selectedPass}
             prevStep={prevStep}
             selectError={onSelectedError}
+            onSelectedLocation={onSelectedLocation}
+            satellites={selectedLocation.satellites}
           />
         );
       case 4:
@@ -212,6 +177,7 @@ export default function Home() {
           <SingleError
             error={selectedError}
             prevStep={prevStep}
+         
           />
         );
       default:

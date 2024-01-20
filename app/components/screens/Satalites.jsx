@@ -23,7 +23,7 @@ export default function Satalites({
   useEffect(() => {
     onSelectedSatelite(selectedSatalite);
   }, []);
-
+// console.log(satellites,'test satalites')
   return (
     <div className="flex flex-col flex-1 w-full overflow-hidden bg-white divide-y divide-gray-200 rounded-lg shadow">
       <div className="flex flex-1 px-4 py-5 sm:p-6">
@@ -75,6 +75,7 @@ export default function Satalites({
                             {/* )}{" "} */}
                             {/* Pass(es) */}
                           </RadioGroup.Description>
+                     
                         </span>
                       </span>
                       <CheckCircleIcon
