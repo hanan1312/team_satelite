@@ -64,6 +64,7 @@ export default function Locations({
 
       // await response.json then execute the following
       let passes = await response.json();
+      console.log(passes,'test passes')
    
       // console.log(passes);
 

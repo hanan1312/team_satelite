@@ -84,7 +84,7 @@ export default function Home() {
       stepClone[2].breadcrumb = selectedPass.s3_path;
     }
     if (selectedError) {
-      stepClone[3].breadcrumb = selectedError.station;
+      stepClone[3].breadcrumb = selectedError.image_name;
     }
     setSteps(stepClone);
   }, [selectedLocation, selectedSatelite, selectedPass, selectedError]);
@@ -131,7 +131,7 @@ export default function Home() {
   };
 
   // get server side props
-
+// console.log(selectedPass,'selectedPass')
   // display the current screen based on the active step
   const displayScreen = () => {
     switch (activeStep) {
@@ -146,31 +146,31 @@ export default function Home() {
       case 1:
         return (
           <Satalites
-            satellites={selectedLocation.satellites}
-            nextStep={nextStep}
-            prevStep={prevStep}
-            onSelectedSatelite={onSelectedSatelite}
-          />
+          satellites={selectedLocation.satellites}
+          nextStep={nextStep}
+          prevStep={prevStep}
+          onSelectedSatelite={onSelectedSatelite}
+        />
         );
       case 2:
         return (
           <Passes
-            satalite={selectedSatelite}
-            selectPass={onSelectedPass}
-            prevStep={prevStep}
-            satellites={selectedLocation.satellites}
-            
-          />
+          satalite={selectedSatelite}
+          selectPass={onSelectedPass}
+          prevStep={prevStep}
+          satellites={selectedLocation.satellites}
+
+        />
         );
       case 3:
         return (
           <Preview
-            pass={selectedPass}
-            prevStep={prevStep}
-            selectError={onSelectedError}
-            onSelectedLocation={onSelectedLocation}
-            satellites={selectedLocation.satellites}
-          />
+          pass={selectedPass}
+          prevStep={prevStep}
+          selectError={onSelectedError}
+          onSelectedLocation={onSelectedLocation}
+          satellites={selectedLocation.satellites}
+        />
         );
       case 4:
         return (

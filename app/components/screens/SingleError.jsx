@@ -19,7 +19,7 @@ export default function Preview({ nextStep, prevStep, pass, error }) {
   //   .map(([key, value]) => {
   //     console.log([key, value],'test value')
   //   })
- 
+
   useEffect(() => {
     setTimeout(() => {
       setImageUrl(constructMainEC2Url(error.s3_path, error.image_name));

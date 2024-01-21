@@ -9,7 +9,7 @@ import PixelPicker from "../PixelPicker";
 import Placeholder from "../../undraw_outer_space_re_u9vd.svg";
 import Image from "next/image";
 
-export default function Preview({ nextStep, prevStep, pass, selectError ,  satellites=[],}) {
+export default function Preview({ nextStep, prevStep, pass, selectError,satellites=[] }) {
   const [page, setPage] = useState(1);
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -27,6 +27,7 @@ export default function Preview({ nextStep, prevStep, pass, selectError ,  satel
     "Pass_Date",
     
   ];
+  
   const [from, setFrom] = useState(1);
   const [to, setTo] = useState(100);
   const [imageUrl, setImageUrl] = useState(null);
@@ -49,6 +50,11 @@ export default function Preview({ nextStep, prevStep, pass, selectError ,  satel
     // fetchPasses();
   };
 
+  let stationTest = satellites.map(e => e.station)
+  let uniqueSet = new Set(stationTest);
+  let result=Array.from(uniqueSet);
+  // console.log(result, "station in string")
+  
   const calculateFromTo = () => {
     // if (data?.data?.data) {
     const fromCalc = (page - 1) * 100 + 1;
@@ -60,10 +66,7 @@ export default function Preview({ nextStep, prevStep, pass, selectError ,  satel
     setTo(toCalc);
     // }
   };
-      let stationTest = satellites.map(e => e.station)
-      let uniqueSet = new Set(stationTest);
-      let result=Array.from(uniqueSet);
-      console.log(result, "station in string")
+ 
   
   const fetchPasses = async () => {
     setLoading(true);
@@ -94,7 +97,7 @@ export default function Preview({ nextStep, prevStep, pass, selectError ,  satel
       image_name: pass.image_name,
       startDate: startDateISO,
       endDate: endDateISO,
-      station:pass.station
+ 
     };
 
     const url = new URL(baseUrl, document.baseURI);
@@ -170,7 +173,7 @@ export default function Preview({ nextStep, prevStep, pass, selectError ,  satel
 
       let findStation = resData.data.data.map(e => e.station)
       let findStationV2=findStation.filter(e=>e ==result)
-      // console.log(findStationV2, 'findStationV2 ')
+      console.log(findStationV2, 'findStationV2 ')
       
       
      
@@ -282,7 +285,7 @@ export default function Preview({ nextStep, prevStep, pass, selectError ,  satel
      } 
       return pass[key] === "Invalid date" ? "N/A" : pass[key] ?? "N/A";
     };
-    console.log(data,'data')
+    
     const passKeys = [
       "ID",
       "station",

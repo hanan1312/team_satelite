@@ -114,8 +114,11 @@ export async function GET(req, res) {
     }),
   ]);
 
+
   return NextResponse.json({
     count: trans[1].length,
+    
     passes: trans[0],
   });
+ 
 }

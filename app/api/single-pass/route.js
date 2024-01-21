@@ -12,13 +12,17 @@ const pageSize = 100;
 async function getSatName() {
 return await prisma.$queryRaw`select station,count(Pass_ID)from sys.ml_localization_rf_events group by station`
 }
+async function getPassId() {
+return await prisma.$queryRaw`select station,count(Pass_ID)from sys.ml_localization_rf_events group by station`
+}
+
 export async function GET(req, res) {
   let skip = getQSParamFromURL("page", req.url)
     ? (getQSParamFromURL("page", req.url) - 1) * pageSize
     : 0;
 
   let imageNames = [getQSParamFromURL("image_name", req.url)];
-
+console.log(imageNames,'test imageNames ')
 
   const trans = await prisma.$transaction([
     prisma.ml_localization_rf_events.count({
@@ -45,7 +49,7 @@ export async function GET(req, res) {
     data: trans[1],
   };
 
-  // console.log(data.data);
+  // console.log(data.count,'test count');
 
   return NextResponse.json({
     data,
@@ -64,8 +68,6 @@ export async function POST(req, res) {
 
   let imageNames = [getQSParamFromURL("image_name", req.url)];
   
-  
-  let satNames = await getSatName()
 
 
   let startDateParam = getQSParamFromURL("startDate", req.url);

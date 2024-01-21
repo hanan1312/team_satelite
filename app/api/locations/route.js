@@ -22,6 +22,7 @@ async function getLocationData(location) {
   });
 }
 
+
 // Helper function to get satellite data
 async function getSatData(satNames, location) {
   const findManyTransactions = satNames.map((sat_name) =>
@@ -39,7 +40,7 @@ async function getSatData(satNames, location) {
 
   const groupByTransactions = satNames.map((sat_name) =>
     prisma.ml_localization_rf_events.groupBy({
-      by: ["image_name", "s3_path", "Pass_Date"],
+      by: ["image_name", "s3_path", "Pass_Date","Pass_ID"],
       where: {
         sat_name: sat_name,
         station: location,
@@ -59,12 +60,14 @@ async function getSatData(satNames, location) {
 
 // Helper function to create satellite object
 function createSatellite(e, locationData, groupByResult) {
+  
   const locationDataItem = locationData.find(
     (item) => item.sat_name === e[0].sat_name
   );
   const numOfErrors = locationDataItem ? locationDataItem._count._all : 0;
 
   const numOfPasses = groupByResult.length ?? 0;
+  
 
   return {
     id: e[0].sat_name,
@@ -74,8 +77,8 @@ function createSatellite(e, locationData, groupByResult) {
         moment(e[0].Pass_Date, "YYYY-MM-DD-HH:mm:ss").fromNow()
       : "No passes yet.",
     additional: `${numOfErrors} Error(s), ${numOfPasses} Pass(es)`,
-    numOfPasses: numOfPasses,
     station:e[0].station
+ 
  
   };
 }
@@ -107,6 +110,7 @@ export async function GET(req, res) {
       const groupByResult = groupByResults[i];
 
       let satellite = createSatellite(e, locationData, groupByResult);
+     
       if (
         !lastLocationDate ||
         moment(e[0].Pass_Date, "YYYY-MM-DD-HH:mm:ss").isAfter(lastLocationDate)
