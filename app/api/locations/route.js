@@ -84,7 +84,7 @@ function createSatellite(e, locationData, groupByResult) {
 }
 
 async function getLocations() {
-  return await prisma.$queryRaw`SELECT distinct station FROM sys.ml_localization_rf_events`
+  return await prisma.$queryRaw`SELECT distinct station FROM stand_alone.ml_localization_rf_events`
 }
 
 export async function GET(req, res) {

@@ -1,0 +1,14 @@
+
+
+
+in .env file :
+	database url == change "sys" into >> "stand_alone"
+	
+	
+in locations/route.js:
+	line 87 change "sys" into >> "stand_alone"
+
+in single_pass/route.js
+	line 13 and 16 change "sys" into >> "stand_alone"
+
+
