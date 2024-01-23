@@ -19,12 +19,11 @@ export default function Preview({ nextStep, prevStep, pass, selectError,satellit
   const [eventType, setEventType] = useState("all");
 
   const excludeKeys = [
-    "image_name",
+  
     "s3_path",
     "original_img",
-    "sat_name",
     "local_folder_name",
-    "Pass_Date",
+ 
     
   ];
   
@@ -97,6 +96,7 @@ export default function Preview({ nextStep, prevStep, pass, selectError,satellit
       image_name: pass.image_name,
       startDate: startDateISO,
       endDate: endDateISO,
+      Pass_ID:pass.Pass_ID
  
     };
 
@@ -118,11 +118,19 @@ export default function Preview({ nextStep, prevStep, pass, selectError,satellit
 
     if (response.ok) {
       let resData = await response.json();
-      // console.log(resData,'test')
-
+   
+ 
+      // let nonDuplicatedPassIds = resData.data.data
+      // .filter((item, index, self) => {
+      //   return self.findIndex(t => t.pass_id === item.pass_id) === index;
+      // })
+      //   .map(item => item.pass_id);
+      
+      // console.log(nonDuplicatedPassIds)
       resData.data.data = resData.data.data.map((item, index) => {
         // item.s3_path = constructS3Url(item.s3_path, item.image_name);
     
+        
         let error_start_time = moment(
           item.error_start_time,
           "YYYY-MM-DD-HH:mm:ss"
@@ -171,28 +179,46 @@ export default function Preview({ nextStep, prevStep, pass, selectError,satellit
         ]);
       }
 
-      let findStation = resData.data.data.map(e => e.station)
-      let findStationV2=findStation.filter(e=>e ==result)
-      console.log(findStationV2, 'findStationV2 ')
+      // let findStation = resData.data.data.map(e => e.station)
+      // let findStationV2=findStation.filter(e=>e ==result)
+      // console.log(findStationV2, 'findStationV2 ')
       
       
      
       var filteredArray = resData.data.data.filter(function(obj) {
+        
         return obj.station == result;
-    });
-    filteredArray = filteredArray.map(function(obj, index) {
+        
+      })
+      
+      
+      var finalFilteredArray= resData.data.data
+      .filter(function (obj) {
+        return obj.station == result;
+      })
+      .filter((item, index, self) => {
+        return self.findIndex((t) => t.Pass_ID === item.Pass_ID) === index;
+      });
+      
+      // console.log(finalFilteredArray, 'filter')
+      
+      finalFilteredArray = finalFilteredArray.map(function(obj, index) {
       var newObj = {...obj}; // create a shallow copy of the object
-      newObj.ID = index+1; // assign the new id value
+      newObj.ID = index + 1; // assign the new id value
+     
       return newObj;
+      
   });
 
 
-      // console.log(filteredArray.length, 'filteredArray')
-      // console.log(resData,'redata')
+
+
+
      
       
     
       resData.data.data = filteredArray
+
      
      
       setData({
@@ -289,6 +315,8 @@ export default function Preview({ nextStep, prevStep, pass, selectError,satellit
     const passKeys = [
       "ID",
       "station",
+      "image_name",
+      "sat_name",
       "Error_Source",
       "RF_event_type",
       "time_stamp",
@@ -390,6 +418,8 @@ export default function Preview({ nextStep, prevStep, pass, selectError,satellit
     const passKeys = [
       "ID",
       "station",
+      "image_name",
+      "sat_name",
       "Error_Source",
       "RF_event_type",
       "time_stamp",

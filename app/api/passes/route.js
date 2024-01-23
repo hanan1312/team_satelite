@@ -73,7 +73,7 @@ export async function GET(req, res) {
       },
     }),
     prisma.ml_localization_rf_events.groupBy({
-      by: [ "s3_path",  "has_error","Pass_ID"],
+      by: [ "image_name","s3_path",  "has_error","Pass_ID"],
       where: {
         sat_name: {
           equals: sat_name,

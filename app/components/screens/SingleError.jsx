@@ -22,11 +22,12 @@ export default function Preview({ nextStep, prevStep, pass, error }) {
 
   useEffect(() => {
     setTimeout(() => {
-      setImageUrl(constructMainEC2Url(error.s3_path, error.image_name));
+      setImageUrl(constructMainEC2Url(error.s3_path, error.image_name,error.Pass_ID));
       setErrImageUrl(
         constructSubEC2Url(
           error.s3_path,
           error.image_name,
+          error.Pass_ID,
           error.sub_img_loc_h,
           error.sub_img_loc_w
         )
