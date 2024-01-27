@@ -9,7 +9,7 @@ import PixelPicker from "../PixelPicker";
 import Placeholder from "../../undraw_outer_space_re_u9vd.svg";
 import Image from "next/image";
 
-export default function Preview({ nextStep, prevStep, pass, selectError }) {
+export default function Preview({ nextStep, prevStep, pass, selectError,satellites=[] }) {
   const [page, setPage] = useState(1);
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -19,13 +19,14 @@ export default function Preview({ nextStep, prevStep, pass, selectError }) {
   const [eventType, setEventType] = useState("all");
 
   const excludeKeys = [
-    "image_name",
+  
     "s3_path",
     "original_img",
-    "sat_name",
     "local_folder_name",
-    "Pass_Date",
+ 
+    
   ];
+  
   const [from, setFrom] = useState(1);
   const [to, setTo] = useState(100);
   const [imageUrl, setImageUrl] = useState(null);
@@ -48,6 +49,11 @@ export default function Preview({ nextStep, prevStep, pass, selectError }) {
     // fetchPasses();
   };
 
+  let stationTest = satellites.map(e => e.station)
+  let uniqueSet = new Set(stationTest);
+  let result=Array.from(uniqueSet);
+  // console.log(result, "station in string")
+  
   const calculateFromTo = () => {
     // if (data?.data?.data) {
     const fromCalc = (page - 1) * 100 + 1;
@@ -59,7 +65,8 @@ export default function Preview({ nextStep, prevStep, pass, selectError }) {
     setTo(toCalc);
     // }
   };
-
+ 
+  
   const fetchPasses = async () => {
     setLoading(true);
 
@@ -89,6 +96,8 @@ export default function Preview({ nextStep, prevStep, pass, selectError }) {
       image_name: pass.image_name,
       startDate: startDateISO,
       endDate: endDateISO,
+      Pass_ID:pass.Pass_ID
+ 
     };
 
     const url = new URL(baseUrl, document.baseURI);
@@ -109,10 +118,19 @@ export default function Preview({ nextStep, prevStep, pass, selectError }) {
 
     if (response.ok) {
       let resData = await response.json();
-
+   
+ 
+      // let nonDuplicatedPassIds = resData.data.data
+      // .filter((item, index, self) => {
+      //   return self.findIndex(t => t.pass_id === item.pass_id) === index;
+      // })
+      //   .map(item => item.pass_id);
+      
+      // console.log(nonDuplicatedPassIds)
       resData.data.data = resData.data.data.map((item, index) => {
         // item.s3_path = constructS3Url(item.s3_path, item.image_name);
-
+    
+        
         let error_start_time = moment(
           item.error_start_time,
           "YYYY-MM-DD-HH:mm:ss"
@@ -129,6 +147,7 @@ export default function Preview({ nextStep, prevStep, pass, selectError }) {
         resData.data.data[index]["error_start_time"] = error_start_time;
         //@ts-ignore
         resData.data.data[index]["error_end_time"] = error_end_time;
+        
         item = {
           ID: item.ID,
           s3_path: item.s3_path,
@@ -160,9 +179,50 @@ export default function Preview({ nextStep, prevStep, pass, selectError }) {
         ]);
       }
 
-      // console.log(resData);
+      // let findStation = resData.data.data.map(e => e.station)
+      // let findStationV2=findStation.filter(e=>e ==result)
+      // console.log(findStationV2, 'findStationV2 ')
+      
+      
+     
+      var filteredArray = resData.data.data.filter(function(obj) {
+        
+        return obj.station == result;
+        
+      })
+      
+      
+      var finalFilteredArray= resData.data.data
+      .filter(function (obj) {
+        return obj.station == result;
+      })
+      .filter((item, index, self) => {
+        return self.findIndex((t) => t.Pass_ID === item.Pass_ID) === index;
+      });
+      
+      // console.log(finalFilteredArray, 'filter')
+      
+      finalFilteredArray = finalFilteredArray.map(function(obj, index) {
+      var newObj = {...obj}; // create a shallow copy of the object
+      newObj.ID = index + 1; // assign the new id value
+     
+      return newObj;
+      
+  });
 
+
+
+
+
+     
+      
+    
+      resData.data.data = filteredArray
+
+     
+     
       setData({
+       
         ...resData,
       });
 
@@ -238,18 +298,25 @@ export default function Preview({ nextStep, prevStep, pass, selectError }) {
         </div>
       );
     }
+
     const TableCell = ({ className, value }) => (
+      
       <td className={className}>{value}</td>
     );
     const getCellValue = (key, pass) => {
-      if (key === "has_error") {
+ 
+      //  console.log(key,pass,'test ')
+     if (key === "has_error" ) {
         return pass[key] ? "Yes" : "No";
-      }
+     } 
       return pass[key] === "Invalid date" ? "N/A" : pass[key] ?? "N/A";
     };
+    
     const passKeys = [
       "ID",
       "station",
+      "image_name",
+      "sat_name",
       "Error_Source",
       "RF_event_type",
       "time_stamp",
@@ -315,7 +382,12 @@ export default function Preview({ nextStep, prevStep, pass, selectError }) {
 
         "whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 lg:pl-8"
       );
-
+      
+   
+      
+     
+     
+    
       return (
         <tr
           className={rowClassNames}
@@ -323,8 +395,10 @@ export default function Preview({ nextStep, prevStep, pass, selectError }) {
             selectError(pass);
           }}
         >
+         
+          
           {passKeys.map((key) =>
-            excludeKeys.includes(key) ? null : (
+            excludeKeys.includes(key) ? null :(
               <TableCell
                 className={cellClassNames}
                 value={getCellValue(key, pass)}
@@ -335,6 +409,7 @@ export default function Preview({ nextStep, prevStep, pass, selectError }) {
       );
     });
   }, [data, selectError]);
+
   const tableHeaders = useMemo(() => {
     if (!data?.data?.data || !data?.data?.data[0]) {
       return null;
@@ -343,6 +418,8 @@ export default function Preview({ nextStep, prevStep, pass, selectError }) {
     const passKeys = [
       "ID",
       "station",
+      "image_name",
+      "sat_name",
       "Error_Source",
       "RF_event_type",
       "time_stamp",
@@ -424,13 +501,15 @@ export default function Preview({ nextStep, prevStep, pass, selectError }) {
           <div className="sm:flex sm:items-center">
             <div className="sm:flex-auto">
               <h1 className="text-2xl font-bold text-gray-800 text-start">
-                Select Error
+                Select Error 
               </h1>
+           
               <p className="mt-2 text-sm text-gray-700">
                 {pass.image_name}'s Errors.
               </p>
             </div>
           </div>
+          
           <div className="flow-root mt-8">
             <div className="-mx-4">
               <div className="relative inline-block w-full max-w-full py-2 align-middle">
