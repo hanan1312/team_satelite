@@ -30,7 +30,7 @@ export async function GET(req, res) {
     endTime.setHours(23, 59, 59, 999);
   }
   const trans = await prisma.$transaction([
-    prisma.ml_localization.groupBy({
+    prisma.ml_localization_rf_events.groupBy({
       by: ["image_name", "s3_path", "has_error","Pass_ID"],
       skip: skip,
       take: pageSize,
@@ -72,7 +72,7 @@ export async function GET(req, res) {
         Pass_ID: "desc",
       },
     }),
-    prisma.ml_localization.groupBy({
+    prisma.ml_localization_rf_events.groupBy({
       by: [ "image_name","s3_path",  "has_error","Pass_ID"],
       where: {
         sat_name: {
