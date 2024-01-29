@@ -74,9 +74,9 @@ export default function Locations({
         let parts = pass.image_name.split("_");
 
        
-        // let passDate = moment(pass.Pass_Date, "YYYY-MM-DD HH:mm:ss").format(
-        //   "MM/DD/YYYY h:mm a"
-        // );
+        let passDate = moment(pass.Pass_Date, "YYYY-MM-DD HH:mm:ss").format(
+          "MM/DD/YYYY h:mm a"
+        );
 
         let processedDate = moment(
           parts[parts.length - 1],
@@ -98,7 +98,7 @@ export default function Locations({
         pass.error_end_time = error_end_time;
 
         tempData.push({
-          // passDate: passDate,
+          passDate: passDate,
           processedDate: processedDate,
           ...pass,
         });
@@ -311,7 +311,7 @@ export default function Locations({
                           >
                             {idx + 1}
                           </td>
-                          <td
+                          {/* <td
                             className={classNames(
                               idx !== displayData.length - 1
                                 ? "border-b border-gray-200"
@@ -322,8 +322,8 @@ export default function Locations({
                             {pass.Pass_ID == "Invalid date"
                               ? "N/A"
                               : pass.Pass_ID }
-                          </td>
-                          {/* <td
+                          </td> */}
+                          <td
                             className={classNames(
                               idx !== displayData.length - 1
                                 ? "border-b border-gray-200"
@@ -334,7 +334,7 @@ export default function Locations({
                             {pass.passDate == "Invalid date"
                               ? "N/A"
                               : pass.passDate}
-                          </td> */}
+                          </td>
                           <td
                             className={classNames(
                               idx !== displayData.length - 1

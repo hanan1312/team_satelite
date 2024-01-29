@@ -11,7 +11,7 @@ const pageSize = 100;
 
 // Helper function to get location data
 async function getLocationData(location) {
-  return await prisma.ml_localization_rf_events.groupBy({
+  return await prisma.ml_localization.groupBy({
     by: ["sat_name"],
     where: {
       station: location,
@@ -26,7 +26,7 @@ async function getLocationData(location) {
 // Helper function to get satellite data
 async function getSatData(satNames, location) {
   const findManyTransactions = satNames.map((sat_name) =>
-    prisma.ml_localization_rf_events.findMany({
+    prisma.ml_localization.findMany({
       where: {
         sat_name: sat_name,
         station: location,
@@ -39,7 +39,7 @@ async function getSatData(satNames, location) {
   );
 
   const groupByTransactions = satNames.map((sat_name) =>
-    prisma.ml_localization_rf_events.groupBy({
+    prisma.ml_localization.groupBy({
       by: ["image_name", "s3_path", "Pass_Date","Pass_ID"],
       where: {
         sat_name: sat_name,
@@ -84,10 +84,10 @@ function createSatellite(e, locationData, groupByResult) {
 }
 
 async function getLocations() {
-  return await prisma.$queryRaw`SELECT distinct station FROM stand_alone.ml_localization_rf_events`
+  return await prisma.$queryRaw`SELECT distinct station FROM stand_alone.ml_localization`
 }
 async function getErrors() {
-  return await prisma.$queryRaw`SELECT distinct station FROM stand_alone.ml_localization_rf_events`
+  return await prisma.$queryRaw`SELECT distinct station FROM stand_alone.ml_localization`
 }
 
 export async function GET(req, res) {

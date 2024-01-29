@@ -10,13 +10,13 @@ const prisma = new PrismaClient();
 const pageSize = 100;
 
 async function getSatName() {
-return await prisma.$queryRaw`select station,count(Pass_ID)from stand_alone.ml_localization_rf_events group by station`
+return await prisma.$queryRaw`select station,count(Pass_ID)from stand_alone.ml_localization group by station`
 }
 async function getPassId() {
-return await prisma.$queryRaw`select  Pass_ID from stand_alone.ml_localization_rf_events  where station="table_mountain" and sat_name="NOAA18"`
+return await prisma.$queryRaw`select  Pass_ID from stand_alone.ml_localization  where station="table_mountain" and sat_name="NOAA18"`
 }
 async function getDataByPassId(passId, callback) {
-  return await prisma.$queryRaw `SELECT image_name FROM stand_alone.ml_localization_rf_events WHERE Pass_ID = ?`, [passId], function (error, results, fields) {
+  return await prisma.$queryRaw `SELECT image_name FROM stand_alone.ml_localization WHERE Pass_ID = ?`, [passId], function (error, results, fields) {
      if (error) throw error;
      callback(results);
   }
@@ -31,7 +31,7 @@ export async function GET(req, res) {
 
 console.log(passId,'test pass Id')
   const trans = await prisma.$transaction([
-    prisma.ml_localization_rf_events.count({
+    prisma.ml_localization.count({
       where: {
         Pass_ID: {
           in: passId,
@@ -39,7 +39,7 @@ console.log(passId,'test pass Id')
       },
     }),
 
-    prisma.ml_localization_rf_events.findMany({
+    prisma.ml_localization.findMany({
       skip: skip,
       take: pageSize,
       where: {
@@ -100,7 +100,7 @@ export async function POST(req, res) {
   // console.log(body);
 
   const trans = await prisma.$transaction([
-    prisma.ml_localization_rf_events.count({
+    prisma.ml_localization.count({
       where: {
         Pass_ID: {
           in: passId,
@@ -134,7 +134,7 @@ export async function POST(req, res) {
       },
     }),
 
-    prisma.ml_localization_rf_events.findMany({
+    prisma.ml_localization.findMany({
       skip: skip,
       take: pageSize,
       where: {
