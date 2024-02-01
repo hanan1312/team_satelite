@@ -52,7 +52,7 @@ export default function Preview({ nextStep, prevStep, pass, selectError,satellit
   let stationTest = satellites.map(e => e.station)
   let uniqueSet = new Set(stationTest);
   let result=Array.from(uniqueSet);
-  // console.log(result, "station in string")
+  console.log(result, "station in string")
   
   const calculateFromTo = () => {
     // if (data?.data?.data) {
@@ -118,6 +118,7 @@ export default function Preview({ nextStep, prevStep, pass, selectError,satellit
 
     if (response.ok) {
       let resData = await response.json();
+      console.log(resData,"Check Here #################")
    
  
       // let nonDuplicatedPassIds = resData.data.data
