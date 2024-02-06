@@ -46,9 +46,9 @@ export async function GET(req, res) {
                   gte: startTime,
                 },
               },
-              {
-                Pass_Date: null,
-              },
+              // {
+              //   Pass_Date: null,
+              // },
             ],
           },
           {
@@ -58,9 +58,9 @@ export async function GET(req, res) {
                   lte: endTime,
                 },
               },
-              {
-                Pass_Date: null,
-              },
+              // {
+              //   Pass_Date: null,
+              // },
             ],
           },
           {
@@ -86,9 +86,9 @@ export async function GET(req, res) {
                   gte: startTime,
                 },
               },
-              {
-                Pass_Date: null,
-              },
+              // {
+              //   Pass_Date: null,
+              // },
             ],
           },
           {
@@ -98,9 +98,9 @@ export async function GET(req, res) {
                   lte: endTime,
                 },
               },
-              {
-                Pass_Date: null,
-              },
+              // {
+              //   Pass_Date: null,
+              // },
             ],
           },
           {

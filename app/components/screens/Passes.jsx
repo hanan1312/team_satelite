@@ -75,8 +75,8 @@ export default function Locations({
       let result = Array.from(uniqueSet);
     
       passes.passes.forEach((pass) => {
-        // let parts =pass.image_name!==null && pass.image_name.split("_");
-        let parts = pass.image_name !== null ? pass.image_name.split("_") : "none";
+        let parts =pass.image_name!==null && pass.image_name.split("_");
+        // let parts = pass.image_name !== null ? pass.image_name.split("_") : "none";
 
        
         let passDate = moment(pass.Pass_Date, "YYYY-MM-DD HH:mm:ss").format(
@@ -236,7 +236,6 @@ console.log(hasError,'test has error')
                     <option value="all">All</option>
                     <option value={true}>Yes</option>
                     <option value={false}>No</option>
-                    <option value="N/A">None</option>
                   </select>
                 </div>
             

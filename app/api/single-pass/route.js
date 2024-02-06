@@ -107,14 +107,28 @@ export async function POST(req, res) {
       ,
         AND: [
           {
-            error_start_time: {
-              gte: startTime,
-            },
+            OR: [
+              {
+                error_start_time: {
+                  gte: startTime,
+                },
+              },
+              {
+                error_start_time: null,
+              },
+            ],
           },
           {
-            error_end_time: {
-              lte: endTime,
-            },
+            OR: [
+              {
+                error_end_time: {
+                  lte: endTime,
+                },
+              },
+              {
+                error_end_time: null,
+              },
+            ],
           },
          
           
@@ -139,19 +153,35 @@ export async function POST(req, res) {
       where: {
         Pass_ID: {
           in: passId,
-        },
-        
+        }
+      ,
         AND: [
           {
-            error_start_time: {
-              gte: startTime,
-            },
+            OR: [
+              {
+                error_start_time: {
+                  gte: startTime,
+                },
+              },
+              {
+                error_start_time: null,
+              },
+            ],
           },
           {
-            error_end_time: {
-              lte: endTime,
-            },
+            OR: [
+              {
+                error_end_time: {
+                  lte: endTime,
+                },
+              },
+              {
+                error_end_time: null,
+              },
+            ],
           },
+         
+          
           {
             Error_Source: event_type !== "all" ? event_type : undefined,
           },
