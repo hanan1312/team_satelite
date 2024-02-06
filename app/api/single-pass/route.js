@@ -10,11 +10,11 @@ const prisma = new PrismaClient();
 const pageSize = 100;
 
 async function getSatName() {
-return await prisma.$queryRaw`select station,count(Pass_ID)from sys.ml_localization_rf_events group by station`
+return await prisma.$queryRaw`select station,count(Pass_ID)from stand_alone.ml_localization_rf_events group by station`
 }
 
 async function getDataByPassId(passId, callback) {
-  return await prisma.$queryRaw `SELECT image_name FROM sys.ml_localization_rf_events WHERE Pass_ID = ?`, [passId], function (error, results, fields) {
+  return await prisma.$queryRaw `SELECT image_name FROM stand_alone.ml_localization_rf_events WHERE Pass_ID = ?`, [passId], function (error, results, fields) {
      if (error) throw error;
      callback(results);
   }
