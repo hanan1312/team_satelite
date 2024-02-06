@@ -9,7 +9,7 @@ import PixelPicker from "../PixelPicker";
 import Placeholder from "../../undraw_outer_space_re_u9vd.svg";
 import Image from "next/image";
 
-export default function Preview({ nextStep, prevStep, pass, selectError,satellites=[] }) {
+export default function Preview({ nextStep, prevStep, pass, selectError,satellites=[],selectedSatelite }) {
   const [page, setPage] = useState(1);
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -50,9 +50,12 @@ export default function Preview({ nextStep, prevStep, pass, selectError,satellit
   };
 
   let stationTest = satellites.map(e => e.station)
+  
   let uniqueSet = new Set(stationTest);
-  let result=Array.from(uniqueSet);
-  // console.log(result, "station in string")
+  let result = Array.from(uniqueSet);
+
+
+
   
   const calculateFromTo = () => {
     // if (data?.data?.data) {
@@ -185,30 +188,25 @@ export default function Preview({ nextStep, prevStep, pass, selectError,satellit
       
       
      
-      var filteredArray = resData.data.data.filter(function(obj) {
+      var filteredArray = resData.data.data.filter(function (obj) {
         
-        return obj.station == result;
+        
+        return obj.station == result 
         
       })
       
+console.log( resData.data.data,' resData.data.data')
       
-      var finalFilteredArray= resData.data.data
-      .filter(function (obj) {
-        return obj.station == result;
-      })
-      .filter((item, index, self) => {
-        return self.findIndex((t) => t.Pass_ID === item.Pass_ID) === index;
-      });
       
       // console.log(finalFilteredArray, 'filter')
       
-      finalFilteredArray = finalFilteredArray.map(function(obj, index) {
-      var newObj = {...obj}; // create a shallow copy of the object
-      newObj.ID = index + 1; // assign the new id value
+  //     finalFilteredArray = finalFilteredArray.map(function(obj, index) {
+  //     var newObj = {...obj}; // create a shallow copy of the object
+  //     newObj.ID = index + 1; // assign the new id value
      
-      return newObj;
+  //     return newObj;
       
-  });
+  // });
 
 
 

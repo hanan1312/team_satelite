@@ -12,15 +12,14 @@ const pageSize = 100;
 async function getSatName() {
 return await prisma.$queryRaw`select station,count(Pass_ID)from sys.ml_localization_rf_events group by station`
 }
-async function getPassId() {
-return await prisma.$queryRaw`select  Pass_ID from sys.ml_localization_rf_events  where station="table_mountain" and sat_name="NOAA18"`
-}
+
 async function getDataByPassId(passId, callback) {
   return await prisma.$queryRaw `SELECT image_name FROM sys.ml_localization_rf_events WHERE Pass_ID = ?`, [passId], function (error, results, fields) {
      if (error) throw error;
      callback(results);
   }
- }
+}
+ 
 export async function GET(req, res) {
   let skip = getQSParamFromURL("page", req.url)
     ? (getQSParamFromURL("page", req.url) - 1) * pageSize

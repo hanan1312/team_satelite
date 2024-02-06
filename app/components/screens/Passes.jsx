@@ -10,6 +10,7 @@ export default function Locations({
   nextStep,
   prevStep,
   satalite,
+  satellites=[],
 
   onSelectedLocation,
   selectPass = (pass) => {},
@@ -19,8 +20,6 @@ export default function Locations({
   const [to, setTo] = useState(100);
   const [pageNumbers, setPageNumbers] = useState([]);
   const [hasError, setHasError] = useState("all");
-  
-
   const [data, setData] = useState([]);
   const [displayData, setDisplayData] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -53,6 +52,7 @@ export default function Locations({
       has_error: hasError,
       
     };
+ 
     const url = new URL(baseUrl, document.baseURI);
   
     url.search = new URLSearchParams(params).toString();
@@ -64,25 +64,29 @@ export default function Locations({
 
       // await response.json then execute the following
       let passes = await response.json();
-      console.log(passes,'test passes')
+
    
       // console.log(passes);
 
       const tempData = [];
-
+      let stationTest = satellites.map(e => e.station)
+  
+      let uniqueSet = new Set(stationTest);
+      let result = Array.from(uniqueSet);
+    
       passes.passes.forEach((pass) => {
-        let parts = pass.image_name.split("_");
+        let parts =pass.image_name!==null && pass.image_name.split("_");
 
        
-        // let passDate = moment(pass.Pass_Date, "YYYY-MM-DD HH:mm:ss").format(
-        //   "MM/DD/YYYY h:mm a"
-        // );
+        let passDate = moment(pass.Pass_Date, "YYYY-MM-DD HH:mm:ss").format(
+          "MM/DD/YYYY h:mm a"
+        );
 
         let processedDate = moment(
           parts[parts.length - 1],
           "YYYY-MM-DD-HH:mm:ss"
         ).format("MM/DD/YYYY h:mm a");
-
+console.log(processedDate,'test procecced')
         let error_start_time = moment(
           pass.error_start_time,
           "YYYY-MM-DD-HH:mm:ss"
@@ -98,14 +102,24 @@ export default function Locations({
         pass.error_end_time = error_end_time;
 
         tempData.push({
-          // passDate: passDate,
+          passDate: passDate,
           processedDate: processedDate,
           ...pass,
         });
+    
+     
+        
+     
       });
 
-      setDisplayData(tempData);
-
+      var filteredArray = tempData.filter(function (obj) {
+          
+          
+        return obj.station == result 
+        
+      })
+      setDisplayData(filteredArray);
+     
       setData(passes);
 
       setLoading(false);
@@ -117,6 +131,7 @@ export default function Locations({
       setLoading(false);
     }
   };
+console.log(hasError,'test has error')
 
   useEffect(() => {
     fetchPasses();
@@ -209,6 +224,7 @@ export default function Locations({
                   <select
                     name="hasError"
                     id="hasError"
+                  
                     className="bg-gray-50 border pr-8 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     value={hasError}
                     onChange={(e) => {
@@ -218,8 +234,10 @@ export default function Locations({
                     <option value="all">All</option>
                     <option value={true}>Yes</option>
                     <option value={false}>No</option>
+                    <option value="N/A">None</option>
                   </select>
                 </div>
+            
               </div>
             </div>
           </div>
@@ -274,6 +292,12 @@ export default function Locations({
                           scope="col"
                           className="sticky top-0 z-10 border-b border-gray-300 bg-white bg-opacity-75 py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter sm:pl-6 lg:pl-8"
                         >
+                          station
+                        </th>
+                        <th
+                          scope="col"
+                          className="sticky top-0 z-10 border-b border-gray-300 bg-white bg-opacity-75 py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter sm:pl-6 lg:pl-8"
+                        >
                           Processing Date
                         </th>
                         <th
@@ -323,7 +347,19 @@ export default function Locations({
                               ? "N/A"
                               : pass.Pass_ID }
                           </td>
-                          {/* <td
+                          <td
+                            className={classNames(
+                              idx !== displayData.length - 1
+                                ? "border-b border-gray-200"
+                                : "",
+                              "whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 lg:pl-8"
+                            )}
+                          >
+                            {pass.station == "Invalid date"
+                              ? "N/A"
+                              : pass.station }
+                          </td>
+                          <td
                             className={classNames(
                               idx !== displayData.length - 1
                                 ? "border-b border-gray-200"
@@ -334,7 +370,7 @@ export default function Locations({
                             {pass.passDate == "Invalid date"
                               ? "N/A"
                               : pass.passDate}
-                          </td> */}
+                          </td>
                           <td
                             className={classNames(
                               idx !== displayData.length - 1

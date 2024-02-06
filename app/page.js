@@ -169,7 +169,9 @@ export default function Home() {
           prevStep={prevStep}
           selectError={onSelectedError}
           onSelectedLocation={onSelectedLocation}
-          satellites={selectedLocation.satellites}
+            satellites={selectedLocation.satellites}
+            selectedSatelite={selectedSatelite}
+         
         />
         );
       case 4:
