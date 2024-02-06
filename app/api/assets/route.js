@@ -19,6 +19,7 @@ export async function GET(req, res) {
     });
 
     const client = new S3Client({
+      // region: "us-gov-west-1",
       region: "us-east-1",
     });
 

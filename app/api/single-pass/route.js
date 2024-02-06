@@ -29,6 +29,7 @@ async function getSatNameByStation() {
     SELECT DISTINCT station
     FROM stand_alone.ml_localization_rf_events
   `;
+  return uniqueStationsResult;
 
   const uniqueStations = uniqueStationsResult.map((row) => row.station);
 
