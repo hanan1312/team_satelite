@@ -75,7 +75,8 @@ export default function Locations({
       let result = Array.from(uniqueSet);
     
       passes.passes.forEach((pass) => {
-        let parts =pass.image_name!==null && pass.image_name.split("_");
+        // let parts =pass.image_name!==null && pass.image_name.split("_");
+        let parts = pass.image_name !== null ? pass.image_name.split("_") : "none";
 
        
         let passDate = moment(pass.Pass_Date, "YYYY-MM-DD HH:mm:ss").format(
@@ -118,6 +119,7 @@ console.log(processedDate,'test procecced')
         return obj.station == result 
         
       })
+      tempData.sort((a, b) => new Date(b.passDate) - new Date(a.passDate));
       setDisplayData(filteredArray);
      
       setData(passes);
