@@ -99,14 +99,13 @@ export default function Home() {
 
   // next step
   const resetNextStepData = () => {
-    // Reset data for the next step here
-    // For example:
-    resetNextStepData(defaultNextStepData);
+
+    setSelectedPass({});
   };
 
   const nextStep = () => {
+    if (activeStep === 1) resetNextStepData();
     if (activeStep === steps.length - 1) return;
-    resetNextStepData();
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
 
@@ -114,7 +113,6 @@ export default function Home() {
 
   const prevStep = () => {
     if (activeStep === 0) return;
-    resetNextStepData();
     if (activeStep === 1) setSelectedLocation(locations[0]);
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
@@ -160,15 +158,27 @@ export default function Home() {
         />
         );
       case 2:
-        return (
-          <Passes
-          satalite={selectedSatelite}
-          selectPass={onSelectedPass}
-          prevStep={prevStep}
-          satellites={selectedLocation.satellites}
+        if (activeStep === 2) {
+          return (
+            <Passes
+              satalite={selectedSatelite}
+              selectPass={onSelectedPass}
+              prevStep={prevStep}
+              satellites={selectedLocation.satellites}
+            />
+          );
+        } else {
+          return null;
+        }
+        // return (
+        //   <Passes
+        //   satalite={selectedSatelite}
+        //   selectPass={onSelectedPass}
+        //   prevStep={prevStep}
+        //   satellites={selectedLocation.satellites}
 
-        />
-        );
+        // />
+        // );
       case 3:
         return (
           <Preview
