@@ -119,6 +119,7 @@ export async function GET(req, res) {
     count: trans[1].length,
     
     passes: trans[0],
+    
   });
 
 }
