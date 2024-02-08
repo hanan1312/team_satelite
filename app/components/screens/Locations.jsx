@@ -16,7 +16,7 @@ export default function Locations({
 }) {
   const [selectedLocation, setSelectedLocation] = useState(locations[0]);
 
-  // console.log(locations,'locations')
+  console.log(locations,'locations')
   const handleSelectedLocation = (location) => {
     if (!location) return;
     // console.log(location);

@@ -182,9 +182,9 @@ export default function Preview({ nextStep, prevStep, pass, selectError,satellit
         ]);
       }
 
-      // let findStation = resData.data.data.map(e => e.station)
-      // let findStationV2=findStation.filter(e=>e ==result)
-      // console.log(findStationV2, 'findStationV2 ')
+      // let findimage = resData.data.data
+      // // let findStationV2=findStation.filter(e=>e ==result)
+      // console.log(findimage[0], 'findimage######### ')
       
       
      
@@ -224,15 +224,26 @@ console.log( resData.data.data,' resData.data.data')
         ...resData,
       });
 
+      // setTimeout(() => {
+      //   const url = resData?.data?.data[0]?.s3_path
+      //     ? constructMainEC2Url(
+      //         resData?.data?.data[0]?.s3_path,
+      //         pass.image_name
+      //       )
+      //     : null;
+      //   setImageUrl(url);
+      // }, 800);
+
       setTimeout(() => {
-        const url = resData?.data?.data[0]?.s3_path
-          ? constructMainEC2Url(
-              resData?.data?.data[0]?.s3_path,
-              pass.image_name
-            )
-          : null;
+        const url = resData?.data?.data.filter(row => row?.Error_Source !== "RF_evt")[0]?.s3_path
+            ? constructMainEC2Url(
+                resData?.data?.data.filter(row => row?.Error_Source !== "RF_evt")[0]?.s3_path,
+                pass.image_name
+              )
+            : null;
         setImageUrl(url);
-      }, 800);
+    }, 800);
+
 
       const totalPages = Math.ceil(resData?.data?.count / 100);
       setPageNumbers(generatePageNumbers(page, totalPages));

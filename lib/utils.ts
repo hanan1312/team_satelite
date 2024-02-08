@@ -35,7 +35,7 @@ export function constructMainEC2Url(path, name) {
 
   const ext = "_with_localization.png";
 
-  // console.log("path", path, "name", name);
+  console.log("path", path, "name", name);
 
   // remove the last / from path
 
