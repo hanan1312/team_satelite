@@ -11,7 +11,7 @@ export default function Locations({
   prevStep,
   satalite,
   satellites=[],
-
+  station = "",
   onSelectedLocation,
   selectPass = (pass) => {},
 }) {
@@ -50,6 +50,7 @@ export default function Locations({
       startTime: startDate,
       endTime: endDate,
       has_error: hasError,
+      location: station,
       
     };
  

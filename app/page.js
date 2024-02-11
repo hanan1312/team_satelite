@@ -162,6 +162,7 @@ export default function Home() {
           return (
             <Passes
               satalite={selectedSatelite}
+              station={selectedLocation.id}
               selectPass={onSelectedPass}
               prevStep={prevStep}
               satellites={selectedLocation.satellites}

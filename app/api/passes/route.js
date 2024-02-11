@@ -16,7 +16,7 @@ export async function GET(req, res) {
   let sat_name = getQSParamFromURL("sat_name", req.url);
   
   let has_error = getQSParamFromURL("has_error", req.url);
-
+  let location = getQSParamFromURL("location", req.url);
   const today = new Date();
 
   let startTime =
@@ -37,8 +37,16 @@ export async function GET(req, res) {
       where: {
         sat_name: {
           equals: sat_name,
+
         },
+        
         AND: [
+          {
+            station: {
+              equals: location,
+              
+            },
+          },
           {
             OR: [
               {
@@ -69,7 +77,7 @@ export async function GET(req, res) {
         ],
       },
       orderBy: {
-        Pass_Date: "desc",
+        Pass_ID: "desc",
       },
     }),
     prisma.ml_localization_rf_events.groupBy({
@@ -80,6 +88,12 @@ export async function GET(req, res) {
         },
         AND: [
           {
+            station: {
+              equals: location,
+              
+            },
+          },
+          {
             OR: [
               {
                 Pass_Date: {
@@ -109,7 +123,7 @@ export async function GET(req, res) {
         ],
       },
       orderBy: {
-        Pass_Date: "desc",
+        Pass_ID: "desc",
       },
     }),
   ]);
