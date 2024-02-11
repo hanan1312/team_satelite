@@ -84,7 +84,7 @@ function createSatellite(e, locationData, groupByResult) {
 }
 
 async function getLocations() {
-  return await prisma.$queryRaw`SELECT distinct station FROM stand_alone.ml_localization_rf_events`
+  return prisma.$queryRaw`SELECT distinct station FROM stand_alone.ml_localization_rf_events`
 }
 async function getErrors() {
   return await prisma.$queryRaw`SELECT distinct station FROM stand_alone.ml_localization_rf_events`
@@ -94,11 +94,12 @@ export async function GET(req, res) {
   // let locations = getQSParamFromURL("locations", req.url).split(",");
   let response = {};
   let locations = await getLocations();
+  console.log(locations, "locations, here >>>>>>>>")
   let locationNames=locations.map(e=>e.station)
 
   let locationPromises = locationNames.map(async (location) => {
     let locationData = await getLocationData(location);
-    
+    console.log(locationData, "locationData, here >>>>>>>>")
     let lastLocationDate = null;
     let satNames = locationData.map((item) => item.sat_name);
     let { findManyResults, groupByResults } = await getSatData(

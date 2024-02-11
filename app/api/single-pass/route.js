@@ -92,6 +92,7 @@ export async function POST(req, res) {
   const squares = body.selectedSquares;
 
   const event_type = body.event_type;
+  console.log(event_type, "event_type")
 
   const has_error = body.has_error;
   

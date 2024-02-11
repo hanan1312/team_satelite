@@ -128,7 +128,7 @@ export default function Locations({
           ...pass,
         });
     
-        tempData.sort((a, b) => new Date(b.passDate) - new Date(a.passDate));
+        // tempData.sort((a, b) => new Date(b.passDate) - new Date(a.passDate));
         
      
       });

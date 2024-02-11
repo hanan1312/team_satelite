@@ -31,7 +31,7 @@ export async function GET(req, res) {
   }
   const trans = await prisma.$transaction([
     prisma.ml_localization_rf_events.groupBy({
-      by: ["image_name","Pass_Date", "s3_path", "has_error","Pass_ID","station"],
+      by: ["Pass_ID","image_name","Pass_Date", "s3_path", "has_error","station"],
       skip: skip,
       take: pageSize,
       where: {
@@ -69,11 +69,11 @@ export async function GET(req, res) {
         ],
       },
       orderBy: {
-        Pass_ID: "desc",
+        Pass_Date: "desc",
       },
     }),
     prisma.ml_localization_rf_events.groupBy({
-      by: [ "image_name","Pass_Date","s3_path",  "has_error","Pass_ID","station"],
+      by: [ "Pass_ID", "image_name","Pass_Date","s3_path",  "has_error","station"],
       where: {
         sat_name: {
           equals: sat_name,
@@ -109,7 +109,7 @@ export async function GET(req, res) {
         ],
       },
       orderBy: {
-        Pass_ID: "desc",
+        Pass_Date: "desc",
       },
     }),
   ]);

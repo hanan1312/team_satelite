@@ -54,7 +54,7 @@ export default function Home() {
       // await response.json then execute the following
       let locationData = await response.json();
       const dataArray = Object.entries(locationData.response).map(e=>e[1])
-  
+      console.log(locationData, dataArray, "here ###############")
 
 
       setLocations(dataArray);

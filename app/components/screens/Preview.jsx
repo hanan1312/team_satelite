@@ -314,7 +314,7 @@ console.log( resData.data.data,' resData.data.data')
     );
     const getCellValue = (key, pass) => {
  
-      //  console.log(key,pass,'test ')
+      //  console.log(pass === "Error_source"[key === "Both"],'test ')
      if (key === "has_error" ) {
         return pass[key] ? "Yes" : "No";
      } 
@@ -601,12 +601,14 @@ console.log( resData.data.data,' resData.data.data')
                           className="bg-gray-50 border pr-8 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                           value={eventType}
                           onChange={(e) => {
+                            console.log(e,"here #####")
                             setEventType(e.target.value);
                           }}
                         >
                           <option value="all">All</option>
                           <option value="Img_Dgrd">Img_Dgrd</option>
                           <option value="RF_evt">RF_evt</option>
+                          <option value="Both">Both</option>
                         </select>
                       </div>
                     </div>
