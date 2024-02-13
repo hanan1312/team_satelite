@@ -16,9 +16,10 @@ export default function Locations({
 }) {
   const [selectedLocation, setSelectedLocation] = useState(locations[0]);
 
+  console.log(locations,'locations')
   const handleSelectedLocation = (location) => {
     if (!location) return;
-    console.log(location);
+    // console.log(location);
     setSelectedLocation(location);
     onSelectedLocation(location);
   };
@@ -125,6 +126,7 @@ export default function Locations({
 
           {nextStep ? (
             <button
+           
               onClick={nextStep}
               type="submit"
               className="px-3 py-2 text-sm font-semibold text-white bg-indigo-600 rounded-md shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"

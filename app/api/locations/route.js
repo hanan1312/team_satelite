@@ -22,6 +22,7 @@ async function getLocationData(location) {
   });
 }
 
+
 // Helper function to get satellite data
 async function getSatData(satNames, location) {
   const findManyTransactions = satNames.map((sat_name) =>
@@ -39,32 +40,34 @@ async function getSatData(satNames, location) {
 
   const groupByTransactions = satNames.map((sat_name) =>
     prisma.ml_localization_rf_events.groupBy({
-      by: ["image_name", "s3_path", "Pass_Date"],
+      by: ["image_name", "s3_path", "Pass_Date","Pass_ID"],
       where: {
         sat_name: sat_name,
         station: location,
       },
-      orderBy: {
-        Pass_Date: "desc",
-      },
+    //   orderBy: {
+    //     Pass_Date: "desc",
+      // },
     })
   );
 
   const findManyResults = await Promise.all(findManyTransactions);
   const groupByResults = await Promise.all(groupByTransactions);
 
-  console.log({ ...findManyResults, ...groupByResults });
+
   return { findManyResults, groupByResults };
 }
 
 // Helper function to create satellite object
 function createSatellite(e, locationData, groupByResult) {
+  
   const locationDataItem = locationData.find(
     (item) => item.sat_name === e[0].sat_name
   );
   const numOfErrors = locationDataItem ? locationDataItem._count._all : 0;
 
   const numOfPasses = groupByResult.length ?? 0;
+  
 
   return {
     id: e[0].sat_name,
@@ -74,17 +77,29 @@ function createSatellite(e, locationData, groupByResult) {
         moment(e[0].Pass_Date, "YYYY-MM-DD-HH:mm:ss").fromNow()
       : "No passes yet.",
     additional: `${numOfErrors} Error(s), ${numOfPasses} Pass(es)`,
-    numOfPasses: numOfPasses,
+    station:e[0].station
+ 
+ 
   };
 }
 
-export async function GET(req, res) {
-  let locations = getQSParamFromURL("locations", req.url).split(",");
-  let response = {};
+async function getLocations() {
+  return prisma.$queryRaw`SELECT distinct station FROM stand_alone.ml_localization_rf_events`
+}
+async function getErrors() {
+  return prisma.$queryRaw`SELECT distinct station FROM stand_alone.ml_localization_rf_events`
+}
 
-  let locationPromises = locations.map(async (location) => {
+export async function GET(req, res) {
+  // let locations = getQSParamFromURL("locations", req.url).split(",");
+  let response = {};
+  let locations = await getLocations();
+  console.log(locations, "locations, here >>>>>>>>")
+  let locationNames=locations.map(e=>e.station)
+
+  let locationPromises = locationNames.map(async (location) => {
     let locationData = await getLocationData(location);
-    console.log(locationData, location);
+    console.log(locationData, "locationData, here >>>>>>>>")
     let lastLocationDate = null;
     let satNames = locationData.map((item) => item.sat_name);
     let { findManyResults, groupByResults } = await getSatData(
@@ -92,13 +107,14 @@ export async function GET(req, res) {
       location
     );
 
-    console.log({ findManyResults, groupByResults });
+    // console.log({ findManyResults, groupByResults });
     // let lastEntries = await Promise.all(satDataPromises);
 
     let satellites = findManyResults.map((e, i) => {
       const groupByResult = groupByResults[i];
 
       let satellite = createSatellite(e, locationData, groupByResult);
+     
       if (
         !lastLocationDate ||
         moment(e[0].Pass_Date, "YYYY-MM-DD-HH:mm:ss").isAfter(lastLocationDate)

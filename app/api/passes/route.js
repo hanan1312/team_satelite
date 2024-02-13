@@ -12,11 +12,11 @@ export async function GET(req, res) {
   let skip = getQSParamFromURL("page", req.url)
     ? (getQSParamFromURL("page", req.url) - 1) * pageSize
     : 0;
-
+  
   let sat_name = getQSParamFromURL("sat_name", req.url);
-
+  
   let has_error = getQSParamFromURL("has_error", req.url);
-
+  let location = getQSParamFromURL("location", req.url);
   const today = new Date();
 
   let startTime =
@@ -31,14 +31,22 @@ export async function GET(req, res) {
   }
   const trans = await prisma.$transaction([
     prisma.ml_localization_rf_events.groupBy({
-      by: ["image_name", "s3_path", "Pass_Date", "has_error"],
+      by: ["Pass_ID","image_name","Pass_Date", "s3_path", "has_error","station"],
       skip: skip,
       take: pageSize,
       where: {
         sat_name: {
           equals: sat_name,
+
         },
+        
         AND: [
+          {
+            station: {
+              equals: location,
+              
+            },
+          },
           {
             OR: [
               {
@@ -46,9 +54,9 @@ export async function GET(req, res) {
                   gte: startTime,
                 },
               },
-              {
-                Pass_Date: null,
-              },
+              // {
+              //   Pass_Date: null,
+              // },
             ],
           },
           {
@@ -58,9 +66,9 @@ export async function GET(req, res) {
                   lte: endTime,
                 },
               },
-              {
-                Pass_Date: null,
-              },
+              // {
+              //   Pass_Date: null,
+              // },
             ],
           },
           {
@@ -73,12 +81,18 @@ export async function GET(req, res) {
       },
     }),
     prisma.ml_localization_rf_events.groupBy({
-      by: ["image_name", "s3_path", "Pass_Date", "has_error"],
+      by: [ "Pass_ID", "image_name","Pass_Date","s3_path",  "has_error","station"],
       where: {
         sat_name: {
           equals: sat_name,
         },
         AND: [
+          {
+            station: {
+              equals: location,
+              
+            },
+          },
           {
             OR: [
               {
@@ -86,9 +100,9 @@ export async function GET(req, res) {
                   gte: startTime,
                 },
               },
-              {
-                Pass_Date: null,
-              },
+              // {
+              //   Pass_Date: null,
+              // },
             ],
           },
           {
@@ -98,9 +112,9 @@ export async function GET(req, res) {
                   lte: endTime,
                 },
               },
-              {
-                Pass_Date: null,
-              },
+              // {
+              //   Pass_Date: null,
+              // },
             ],
           },
           {
@@ -114,8 +128,12 @@ export async function GET(req, res) {
     }),
   ]);
 
+
   return NextResponse.json({
     count: trans[1].length,
+    
     passes: trans[0],
+    
   });
+
 }
