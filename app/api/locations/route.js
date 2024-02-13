@@ -45,9 +45,9 @@ async function getSatData(satNames, location) {
         sat_name: sat_name,
         station: location,
       },
-      orderBy: {
-        Pass_Date: "desc",
-      },
+    //   orderBy: {
+    //     Pass_Date: "desc",
+      // },
     })
   );
 
@@ -87,7 +87,7 @@ async function getLocations() {
   return prisma.$queryRaw`SELECT distinct station FROM stand_alone.ml_localization_rf_events`
 }
 async function getErrors() {
-  return await prisma.$queryRaw`SELECT distinct station FROM stand_alone.ml_localization_rf_events`
+  return prisma.$queryRaw`SELECT distinct station FROM stand_alone.ml_localization_rf_events`
 }
 
 export async function GET(req, res) {

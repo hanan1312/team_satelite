@@ -77,7 +77,7 @@ export async function GET(req, res) {
         ],
       },
       orderBy: {
-        Pass_ID: "desc",
+        Pass_Date: "desc",
       },
     }),
     prisma.ml_localization_rf_events.groupBy({
@@ -123,7 +123,7 @@ export async function GET(req, res) {
         ],
       },
       orderBy: {
-        Pass_ID: "desc",
+        Pass_Date: "desc",
       },
     }),
   ]);
