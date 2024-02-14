@@ -16,6 +16,7 @@ export async function GET(req, res) {
   let sat_name = getQSParamFromURL("sat_name", req.url);
   
   let has_error = getQSParamFromURL("has_error", req.url);
+  console.log(has_error,"has error")
   let location = getQSParamFromURL("location", req.url);
   const today = new Date();
 
@@ -71,8 +72,11 @@ export async function GET(req, res) {
               // },
             ],
           },
+          // {
+          //   has_error: has_error !== "all" ? has_error === "Yes" ? has_error === "No" : undefined,
+          // },
           {
-            has_error: has_error !== "all" ? has_error === "true" : undefined,
+            has_error: has_error !== "all" ? (has_error === "Yes" ? true : false) : undefined,
           },
         ],
       },
@@ -112,13 +116,16 @@ export async function GET(req, res) {
                   lte: endTime,
                 },
               },
-              // {
-              //   Pass_Date: null,
-              // },
+              {
+                Pass_Date: null,
+              },
             ],
           },
+          // {
+          //   has_error: has_error !== "all" ? has_error === "true" : undefined,
+          // },
           {
-            has_error: has_error !== "all" ? has_error === "true" : undefined,
+            has_error: has_error !== "all" ? (has_error === "Yes" ? true : false) : undefined,
           },
         ],
       },
